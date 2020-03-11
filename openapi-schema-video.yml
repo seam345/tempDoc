@@ -1,6 +1,6 @@
 openapi: 3.0.0
 info:
-  description: "This documentation outlines the public apis for the HF video API"
+  # description: "This documentation outlines the public apis for the HF video API"
   version: "1.0.0"
   title: "HF Video API "
 
@@ -165,6 +165,3 @@ components:
             $ref: '#/definitions/VideoRequest'
       description: time, duration and vehicle to request video for
       required: true
-externalDocs:
-  description: "Find out more about Swagger"
-  url: "http://swagger.io"
