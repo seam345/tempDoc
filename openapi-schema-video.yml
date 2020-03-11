@@ -3,6 +3,9 @@ info:
   # description: "This documentation outlines the public apis for the HF video API"
   version: "1.0.0"
   title: "HF Video API "
+  x-logo:
+    url: 'https://handsfree.co.uk/wp-content/uploads/2019/11/handsfee-group-dark.png'
+    altText: Handsfree logo
 
 host: "video.datalive.com"
 basePath: "/v1"
