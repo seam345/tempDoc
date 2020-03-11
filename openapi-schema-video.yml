@@ -1,0 +1,170 @@
+openapi: 3.0.0
+info:
+  description: "This documentation outlines the public apis for the HF video API"
+  version: "1.0.0"
+  title: "HF Video API "
+
+host: "video.datalive.com"
+basePath: "/v1"
+tags:
+- name: "vehicle"
+  description: "Everything about your Vehicles"
+- name: "video"
+  description: "Everything about your Videos"
+schemes:
+- "https"
+paths:
+  /vehicle:
+    get:
+      tags:
+        - vehicle
+      summery: "Get list of all vehicles in the system"
+
+
+  /vehicle/{vehicleReg}/video:
+    get:
+      tags:
+      - vehicle
+      summary: "Get List of all previously saved video"
+      description: "This api point will return a list of video links that have been previously called and our available to be immediately retrieved"
+      operationId: "vehicleVideo"
+      parameters:
+        - name: vehicleReg
+          in: path
+          description: Vehicle reg
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: "success"
+          schema:
+            $ref: "#/definitions/Videos"
+        400:
+          description: "No vehicle"
+      security:
+      - petstore_auth:
+        - "write:pets"
+        - "read:pets"
+
+
+  /video:
+    post:
+      tags:
+        - "video"
+      summary: "Request video"
+      description: "This api point is used to request video, it will return either a "
+      operationId: "requestVideo"
+      responses:
+        '200':
+          description: "request received"
+      security:
+        - petstore_auth:
+            - 'write:pets'
+            - 'read:pets'
+      requestBody:
+        $ref: '#/components/requestBodies/Video'
+
+  /video/{videoID}:
+    get:
+      tags:
+      - "video"
+      summary: "Retrieve video by ID"
+      description: "This api point will return a"
+      operationId: "retrieveVideo"
+      parameters:
+        - name: videoID
+          in: path
+          description: Video ID
+          required: true
+          schema:
+            type: number
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/definitions/Videos"
+        400:
+          description: "No vehicle"
+      security:
+      - petstore_auth:
+        - "write:pets"
+        - "read:pets"
+
+    /video/recieved:
+      post:
+        tags:
+          - "video"
+        summary: "recieved new video"
+        description: "This api point is used to save video, it will return either a "
+        operationId: "requestVideo"
+        responses:
+          '200':
+            description: "request received"
+        security:
+          - petstore_auth:
+              - 'write:pets'
+              - 'read:pets'
+        requestBody:
+          $ref: '#/components/requestBodies/Video'
+
+
+
+securityDefinitions:
+  petstore_auth:
+    type: "oauth2"
+    authorizationUrl: "http://petstore.swagger.io/oauth/dialog"
+    flow: "implicit"
+    scopes:
+      write:pets: "modify pets in your account"
+      read:pets: "read your pets"
+  api_key:
+    type: "apiKey"
+    name: "api_key"
+    in: "header"
+definitions:
+  Videos:
+    type: "array"
+    items:
+      $ref: "#/definitions/Video"
+  Video:
+    type: "object"
+    properties:
+      id:
+        type: integer
+      status:
+        type: string
+        enum: ["video available", "video pending", "Video unavailable- vehicle keyed off", "video unavailable- no longer on device"]
+      url:
+        type: string
+      startTime:
+        type: string
+        format: date-time
+      durration:
+        type: number
+  VideoRequest:
+    type: "object"
+    properties:
+      registration:
+        type: string
+      startDateTime:
+        type: string
+        format: date-time
+      duration:
+        type: number
+      callbackURL:
+        type: string
+components:
+  requestBodies:
+    Video:
+      content:
+        application/json:
+          schema:
+            $ref: '#/definitions/VideoRequest'
+      description: time, duration and vehicle to request video for
+      required: true
+externalDocs:
+  description: "Find out more about Swagger"
+  url: "http://swagger.io"
